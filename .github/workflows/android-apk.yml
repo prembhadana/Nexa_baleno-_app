@@ -30,6 +30,37 @@ jobs:
       - name: Extract Android project
         run: unzip -q NEXA_Baleno_Android_Project.zip
 
+      - name: Configure Java and Kotlin
+        run: |
+          cat > NEXA_Baleno_Android_Project/app/build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application'
+              id 'org.jetbrains.kotlin.android'
+          }
+
+          android {
+              namespace 'com.nexa.quotation'
+              compileSdk 35
+
+              defaultConfig {
+                  applicationId 'com.nexa.quotation'
+                  minSdk 23
+                  targetSdk 35
+                  versionCode 1
+                  versionName '1.0'
+              }
+
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
+              }
+
+              kotlinOptions {
+                  jvmTarget = '17'
+              }
+          }
+          EOF
+
       - name: Build APK
         run: gradle -p NEXA_Baleno_Android_Project :app:assembleDebug
 
